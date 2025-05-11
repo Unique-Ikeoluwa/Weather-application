@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Weather App</title>
+</head>
+<body class="bg-gradient-to-r from-rose-100 to-teal-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white py-6 px-8 rounded-2xl shadow-lg w-[385px]">
+    <div class="flex items-center mb-4">
+      <span class="text-3xl mr-2">
+        <img src="image/sun and cloud.jpeg" alt="Weather icon" class="w-14">
+      </span>
+      <h1 class="text-xl font-bold">WEATHER APP</h1>
+    </div>
+    <div class="flex items-center justify-center mb-6">
+      <input id="cityInput"
+             type="text"
+             placeholder="Enter city"
+             class="flex-1 border border-gray-300 rounded-l-lg py-2 px-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <button id="search-btn" class="bg-blue-500 text-white px-4 py-[10px] rounded-r-lg hover:bg-blue-600 transition">
+        Search
+      </button>
+    </div>
+    <div id="results" class="bg-gray-50 rounded-xl p-4 text-gray-800"></div>
+
+    <div id="default" class="bg-gray-50 rounded-xl p-4 text-gray-800">
+      <h2 class="text-lg font-semibold mb-1">London, GB</h2>
+      <p class="text-sm mb-2">Clear sky</p>
+      <div class="flex items-center justify-between mb-3">
+        <p class="text-3xl font-bold">15°C</p>
+        <span class="text-4xl">
+          <img src="image/sun.jpeg" alt="Weather icon" class="w-16">
+        </span>
+      </div>
+      <div class="flex items-center text-sm mb-1">
+        <span class="mr-2">
+          <img src="image/dfe921cb-03d6-4670-80c1-365d45a1553f.jpeg" alt="Humidity icon" class="w-8">
+        </span>
+        <span>Humidity: 56%</span>
+      </div>
+      <div class="flex items-center text-sm">
+        <span class="mr-2">
+          <img src="image/arrow.jpeg" alt="Wind icon" class="w-8">
+        </span>
+        <span>Wind: 3.6 m/s</span>
+      </div>
+    </div>
+
+    <a href="https://maps.google.com"
+       target="_blank"
+       class="mt-4 block text-center bg-white border border-gray-300 rounded-lg py-2 text-sm hover:bg-gray-100 transition">
+      <div class="flex items-center justify-center space-x-2">
+        <img src="image/location.jpeg" alt="Maps Icon" class="w-5 h-5">
+        <span>Open in Google Maps</span>
+      </div>
+    </a>
+  </div>
+
+  <script>
+    const weatherCodeMeaning = {
+      0: "Clear sky",
+      1: "Mainly clear",
+      2: "Partly cloudy",
+      3: "Overcast",
+      45: "Fog",
+      48: "Depositing rime fog",
+      51: "Light drizzle",
+      53: "Moderate drizzle",
+      55: "Dense drizzle",
+      56: "Light freezing drizzle",
+      57: "Dense freezing drizzle",
+      61: "Slight rain",
+      63: "Moderate rain",
+      65: "Heavy rain",
+      66: "Light freezing rain",
+      67: "Heavy freezing rain",
+      71: "Slight snow fall",
+      73: "Moderate snow fall",
+      75: "Heavy snow fall",
+      77: "Snow grains",
+      80: "Slight rain showers",
+      81: "Moderate rain showers",
+      82: "Violent rain showers",
+      85: "Slight snow showers",
+      86: "Heavy snow showers",
+      95: "Thunderstorm",
+      96: "Thunderstorm with slight hail",
+      99: "Thunderstorm with heavy hail"
+    };
+
+    const weatherIcons = {
+      0: "clear.png", 
+      1: "mostly_clear.png", 
+      2: "partly_cloudy.png", 
+      3: "overcast.png", 
+      45: "fog.png", 
+      48: "rime_fog.png", 
+      51: "light_drizzle.png", 
+      53: "moderate_drizzle.png",
+      55: "heavy_drizzle.png", 
+      61: "light_rain.png", 
+      63: "moderate_rain.png", 
+      65: "heavy_rain.png",
+      71: "light_snow.png", 
+      73: "moderate_snow.png", 
+      75: "heavy_snow.png",
+      95: "thunderstorm.png", 
+      99: "hailstorm.png"
+    };
+
+    document.getElementById("search-btn").addEventListener('click', (e) => {
+      e.preventDefault();
+      const def = document.getElementById("default");
+      if (def) def.remove();
+
+      const city = document.getElementById("cityInput").value;
+      const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}`;
+
+
+      fetch(geoUrl)
+        .then(response => response.json())
+        .then(data => {
+          if (data.results && data.results.length > 0) {
+            const { latitude, longitude, country } = data.results[0];
+            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+
+            return fetch(weatherUrl)
+              .then(response => response.json())
+              .then(weatherData => {
+                const weather = weatherData.current_weather;
+                if (!weather) throw new Error("No current weather data available");
+
+                const code = weather.weathercode;
+                const description = weatherCodeMeaning[code] || "Unknown weather";
+                const icon = weatherIcons[code] || "clear_sky.png";
+
+                document.getElementById("results").innerHTML = `
+                  <h2 class="text-lg font-semibold mb-1">${city}, ${country}</h2>
+                  <p class="text-sm mb-2">${description}</p>
+                  <div class="flex items-center justify-between mb-3">
+                    <p class="text-3xl font-bold">${weather.temperature}°C</p>
+                    <span class="text-4xl"><img src="image/${icon}" alt="${description}" class="w-16"></span>
+                  </div>
+                `;
+             
+              });
+              
+
+          } else {
+            throw new Error("Location not found");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("City not found or API error.");
+        });
+        document.getElementById("cityInput").value = "";
+    });
+  </script>
+</body>
+</html>
