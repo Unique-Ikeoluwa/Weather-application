@@ -43,7 +43,6 @@
       </div>
     </a>
   </div>
-
   <script>
     const weatherCodeMeaning = {
       0: "Clear sky",
@@ -115,10 +114,6 @@
         <p class="text-3xl font-bold">${josweather.temperature}°C</p>
         <span class="text-4xl"><img src="image/sunny.png" alt="" class="w-16"></span>
       </div>
-      <div class="flex items-center text-sm mb-1">
-        <span class="mr-2"><img src="image/humidity.png" alt="" class="w-8"></span>
-        <span>Humidity: ${josweather.humidity}%</span>
-      </div>
       <div class="flex items-center text-sm">
         <span class="mr-2"><img src="image/storm.png" alt="" class="w-8"></span>
         <span>Wind: ${josweather.windspeed}m/s</span>
@@ -158,6 +153,10 @@
                   <p class="text-sm mb-2">${description}</p>
                   <div class="flex items-center justify-between mb-3">
                     <p class="text-3xl font-bold">${weather.temperature}°C</p>
+                    <div class="flex items-center text-sm">
+                    <span class="mr-2"><img src="image/storm.png" alt="" class="w-8"></span>
+                    <span>Wind: ${weather.windspeed}m/s</span>
+                  </div>
                     <span class="text-4xl"><img src="image/${icon}" alt="${description}" class="w-16"></span>
                   </div>
                 `;
