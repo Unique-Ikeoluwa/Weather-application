@@ -8,7 +8,7 @@
   <title>Weather App</title>
   <style>
     #body {
-      background-image: url('./image/weather.jpeg');
+      background-image: url('./dist/image/weather.jpeg');
     }
   </style>
 </head>
@@ -16,7 +16,7 @@
   <div class="bg-white py-6 px-8 rounded-2xl shadow-lg w-[385px]">
     <div class="flex items-center mb-4">
       <span id="switch" class="text-3xl mr-2">
-        <img src="image/sun and cloud.jpeg" alt="Weather icon" class="w-14">
+        <img src="./dist/image/sun and cloud.jpeg" alt="Weather icon" class="w-14">
       </span>
       <h1 class="text-xl font-bold">Phoenix Weather</h1>
     </div>
@@ -38,7 +38,7 @@
        target="_blank"
        class="mt-4 block text-center bg-white border border-gray-300 rounded-lg py-2 text-sm hover:bg-gray-100 transition">
       <div class="flex items-center justify-center space-x-2">
-        <img src="image/location.jpeg" alt="Maps Icon" class="w-5 h-5">
+        <img src="./dist/image/location.jpeg" alt="Maps Icon" class="w-5 h-5">
         <span>Your Location on map</span>
       </div>
     </a>
@@ -109,13 +109,13 @@
             throw new Error("No current weather data available");
           } else {
           def.innerHTML = `<h2 class="text-lg font-semibold mb-1">Jos, Nigeria</h2>
-      <p class="text-sm mb-2">${joscode}</p><span class="text-4xl"><img src="image/${josicon}" alt="desIm" class="w-16"></span>
+      <p class="text-sm mb-2">${joscode}</p><span class="text-4xl"><img src="./dist/image/${josicon}" alt="desIm" class="w-16"></span>
       <div class="flex items-center justify-between mb-3">
         <p class="text-3xl font-bold">${josweather.temperature}°C</p>
-        <span class="text-4xl"><img src="image/sunny.png" alt="" class="w-16"></span>
+        <span class="text-4xl"><img src="./dist/image/sunny.png" alt="" class="w-16"></span>
       </div>
       <div class="flex items-center text-sm">
-        <span class="mr-2"><img src="image/storm.png" alt="" class="w-8"></span>
+        <span class="mr-2"><img src="./dist/image/storm.png" alt="" class="w-8"></span>
         <span>Wind: ${josweather.windspeed}m/s</span>
       </div>`
         } 
@@ -154,10 +154,10 @@
                   <div class="flex items-center justify-between mb-3">
                     <p class="text-3xl font-bold">${weather.temperature}°C</p>
                     <div class="flex items-center text-sm">
-                    <span class="mr-2"><img src="image/storm.png" alt="" class="w-8"></span>
+                    <span class="mr-2"><img src="./dist/image/storm.png" alt="" class="w-8"></span>
                     <span>Wind: ${weather.windspeed}m/s</span>
                   </div>
-                    <span class="text-4xl"><img src="image/${icon}" alt="${description}" class="w-16"></span>
+                    <span class="text-4xl"><img src="./dist/image/${icon}" alt="${description}" class="w-16"></span>
                   </div>
                 `;
              
@@ -178,14 +178,14 @@
     let body = document.getElementById("body")
     switches.addEventListener('click', (e) => {
       e.preventDefault()
-      if (switches.innerHTML == `<img src="image/sun and cloud.jpeg" alt="Weather icon" class="w-14">`){
-        switches.innerHTML = `<img src="image/night.png" alt="Weather icon" class="w-14">`
-        body.style.background = "url('./image/night.jpeg')"
+      if (switches.innerHTML == `<img src="./dist/image/sun and cloud.jpeg" alt="Weather icon" class="w-14">`){
+        switches.innerHTML = `<img src="./dist/image/night.png" alt="Weather icon" class="w-14">`
+        body.style.background = "url('./dist/image/night.jpeg')"
         body.style.backgroundSize = "cover";
         body.style.backgroundPosition = "center";
       } else {
-        switches.innerHTML = `<img src="image/sun and cloud.jpeg" alt="Weather icon" class="w-14">`
-        body.style.backgroundImage = "url('./image/weather.jpeg')"
+        switches.innerHTML = `<img src="./dist/image/sun and cloud.jpeg" alt="Weather icon" class="w-14">`
+        body.style.backgroundImage = "url('./dist/image/weather.jpeg')"
         body.style.backgroundSize = "cover";
         body.style.backgroundPosition = "center";
       }
