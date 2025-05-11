@@ -6,14 +6,19 @@
   <link rel="stylesheet" href="./style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Weather App</title>
+  <style>
+    #body {
+      background-image: url('./image/weather.jpeg');
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-r from-rose-100 to-teal-100 flex items-center justify-center min-h-screen">
+<body id="body" class="flex items-center justify-center min-h-screen bg-cover bg-center">
   <div class="bg-white py-6 px-8 rounded-2xl shadow-lg w-[385px]">
     <div class="flex items-center mb-4">
-      <span class="text-3xl mr-2">
+      <span id="switch" class="text-3xl mr-2">
         <img src="image/sun and cloud.jpeg" alt="Weather icon" class="w-14">
       </span>
-      <h1 class="text-xl font-bold">WEATHER APP</h1>
+      <h1 class="text-xl font-bold">Phoenix Weather</h1>
     </div>
     <div class="flex items-center justify-center mb-6">
       <input id="cityInput"
@@ -27,26 +32,6 @@
     <div id="results" class="bg-gray-50 rounded-xl p-4 text-gray-800"></div>
 
     <div id="default" class="bg-gray-50 rounded-xl p-4 text-gray-800">
-      <h2 class="text-lg font-semibold mb-1">London, GB</h2>
-      <p class="text-sm mb-2">Clear sky</p>
-      <div class="flex items-center justify-between mb-3">
-        <p class="text-3xl font-bold">15°C</p>
-        <span class="text-4xl">
-          <img src="image/sun.jpeg" alt="Weather icon" class="w-16">
-        </span>
-      </div>
-      <div class="flex items-center text-sm mb-1">
-        <span class="mr-2">
-          <img src="image/dfe921cb-03d6-4670-80c1-365d45a1553f.jpeg" alt="Humidity icon" class="w-8">
-        </span>
-        <span>Humidity: 56%</span>
-      </div>
-      <div class="flex items-center text-sm">
-        <span class="mr-2">
-          <img src="image/arrow.jpeg" alt="Wind icon" class="w-8">
-        </span>
-        <span>Wind: 3.6 m/s</span>
-      </div>
     </div>
 
     <a href="https://maps.google.com"
@@ -54,7 +39,7 @@
        class="mt-4 block text-center bg-white border border-gray-300 rounded-lg py-2 text-sm hover:bg-gray-100 transition">
       <div class="flex items-center justify-center space-x-2">
         <img src="image/location.jpeg" alt="Maps Icon" class="w-5 h-5">
-        <span>Open in Google Maps</span>
+        <span>Your Location on map</span>
       </div>
     </a>
   </div>
@@ -110,7 +95,38 @@
       95: "thunderstorm.png", 
       99: "hailstorm.png"
     };
-
+    fetch("https://geocoding-api.open-meteo.com/v1/search?name=Jos").then((res) => res.json()).then((data) => {
+      if (data.results && data.results.length > 0) {
+        const { latitude, longitude } = data.results[0];
+            const josUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+            return fetch(josUrl) 
+        .then(respo => respo.json())
+        .then(josData => {
+        const def = document.getElementById("default")
+        const josweather = josData.current_weather
+        const joscode = weatherCodeMeaning[josweather.weathercode] || "Unknown weather";
+        const josicon = weatherIcons[joscode] || "clear_sky.png"
+        if (!josweather) {
+            throw new Error("No current weather data available");
+          } else {
+          def.innerHTML = `<h2 class="text-lg font-semibold mb-1">Jos, Nigeria</h2>
+      <p class="text-sm mb-2">${joscode}</p><span class="text-4xl"><img src="image/${josicon}" alt="desIm" class="w-16"></span>
+      <div class="flex items-center justify-between mb-3">
+        <p class="text-3xl font-bold">${josweather.temperature}°C</p>
+        <span class="text-4xl"><img src="image/sunny.png" alt="" class="w-16"></span>
+      </div>
+      <div class="flex items-center text-sm mb-1">
+        <span class="mr-2"><img src="image/humidity.png" alt="" class="w-8"></span>
+        <span>Humidity: ${josweather.humidity}%</span>
+      </div>
+      <div class="flex items-center text-sm">
+        <span class="mr-2"><img src="image/storm.png" alt="" class="w-8"></span>
+        <span>Wind: ${josweather.windspeed}m/s</span>
+      </div>`
+        } 
+        })
+      }
+        })
     document.getElementById("search-btn").addEventListener('click', (e) => {
       e.preventDefault();
       const def = document.getElementById("default");
@@ -159,6 +175,22 @@
         });
         document.getElementById("cityInput").value = "";
     });
+    let switches = document.getElementById("switch")
+    let body = document.getElementById("body")
+    switches.addEventListener('click', (e) => {
+      e.preventDefault()
+      if (switches.innerHTML == `<img src="image/sun and cloud.jpeg" alt="Weather icon" class="w-14">`){
+        switches.innerHTML = `<img src="image/night.png" alt="Weather icon" class="w-14">`
+        body.style.background = "url('./image/night.jpeg')"
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
+      } else {
+        switches.innerHTML = `<img src="image/sun and cloud.jpeg" alt="Weather icon" class="w-14">`
+        body.style.backgroundImage = "url('./image/weather.jpeg')"
+        body.style.backgroundSize = "cover";
+        body.style.backgroundPosition = "center";
+      }
+    })
   </script>
 </body>
 </html>
