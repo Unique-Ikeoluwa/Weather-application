@@ -76,7 +76,7 @@
     };
 
     const weatherIcons = {
-      0: "clear.png", 
+      0: "clear_sky.png", 
       1: "mostly_clear.png", 
       2: "partly_cloudy.png", 
       3: "overcast.png", 
@@ -148,18 +148,16 @@
                 const description = weatherCodeMeaning[code] || "Unknown weather";
                 const icon = weatherIcons[code] || "clear_sky.png";
 
-                document.getElementById("results").innerHTML = `
-                  <h2 class="text-lg font-semibold mb-1">${city}, ${country}</h2>
-                  <p class="text-sm mb-2">${description}</p>
-                  <div class="flex items-center justify-between mb-3">
-                    <p class="text-3xl font-bold">${weather.temperature}°C</p>
-                    <div class="flex items-center text-sm">
-                    <span class="mr-2"><img src="./dist/image/storm.png" alt="" class="w-8"></span>
-                    <span>Wind: ${weather.windspeed}m/s</span>
-                  </div>
-                    <span class="text-4xl"><img src="./dist/image/${icon}" alt="${description}" class="w-16"></span>
-                  </div>
-                `;
+                document.getElementById("results").innerHTML = `<h2 class="text-lg font-semibold mb-1">${city}, ${country}</h2>
+                <p class="text-sm mb-2">${description}</p><span class="text-4xl"><img src="./dist/image/${icon}" alt="desIm" class="w-16"></span>
+                <div class="flex items-center justify-between mb-3">
+                  <p class="text-3xl font-bold">${weather.temperature}°C</p>
+                  <span class="text-4xl"><img src="./dist/image/sunny.png" alt="" class="w-16"></span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <span class="mr-2"><img src="./dist/image/storm.png" alt="" class="w-8"></span>
+                  <span>Wind: ${weather.windspeed}m/s</span>
+                </div>`;
              
               });
               
